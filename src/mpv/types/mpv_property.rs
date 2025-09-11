@@ -1,4 +1,4 @@
-use std::ffi::{c_char, c_void};
+use std::os::raw::{c_char, c_void};
 
 use crate::mpv::types::MpvFormat;
 

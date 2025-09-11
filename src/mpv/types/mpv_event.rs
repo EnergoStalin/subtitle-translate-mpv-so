@@ -1,7 +1,10 @@
-use std::ffi::c_void;
+use std::{fmt::Binary, os::raw::c_void};
+
+use crate::mpv::types::MpvError;
 
 #[repr(C)]
-#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+#[derive(PartialEq, Clone, Copy)]
+#[cfg_attr(debug_assertions, derive(Debug))]
 pub enum MpvEventId {
   FileLoaded = 8,
   Shutdown = 1,
@@ -9,10 +12,10 @@ pub enum MpvEventId {
 }
 
 #[repr(C)]
-#[derive(Debug)]
+#[cfg_attr(debug_assertions, derive(Debug))]
 pub struct MpvEvent {
   pub event_id: MpvEventId,
-  pub error: i32,
+  pub error: MpvError,
   pub reply_userdata: u64,
-  pub data: *mut c_void
+  pub data: *const c_void,
 }
