@@ -87,4 +87,56 @@ impl<'a> std::fmt::Display for MpvProperty<'a> {
   }
 }
 
+#[cfg(test)]
+mod layout_test {
+  use crate::mpv::{api::mpv_str::MpvStr, types::{MpvError, MpvEvent, MpvEventId, MpvFormat, MpvProperty}};
+  use std::{ops::Deref, ptr::NonNull};
+
+  unsafe extern "C" {
+    fn free_event(ptr: *mut MpvEvent);
+    fn get_event() -> *mut MpvEvent;
+  }
+
+  struct EventBox {
+    pub ptr: NonNull<MpvEvent>,
+  }
+
+  impl EventBox {
+    pub fn from_ptr(ptr: *mut MpvEvent) -> Self {
+      NonNull::new(ptr).map(|p| EventBox { ptr: p }).unwrap()
+    }
+  }
+
+  impl Deref for EventBox {
+    type Target = MpvEvent;
+    fn deref(&self) -> &Self::Target {
+      unsafe { self.ptr.as_ref() }
+    }
+  }
+
+  impl Drop for EventBox {
+    fn drop(&mut self) {
+      unsafe {
+        free_event(self.ptr.as_ptr());
+      }
+    }
+  }
+
+  #[test]
+  fn mpv_event_test() {
+    unsafe {
+      let ptr = get_event();
+      assert_ne!(ptr as usize, 0);
+      let event = EventBox::from_ptr(ptr);
+
+      assert_eq!((*event).event_id, MpvEventId::FileLoaded);
+      assert_eq!((*event).reply_userdata, 727);
+      assert_eq!((*event).error, MpvError::MpvErrorCommand);
+
+      let data = MpvProperty::from_ptr((*event).data);
+      assert_eq!(data.name.as_str(), "some-property");
+      assert_eq!(data.data.as_type::<MpvStr>().as_str(), "some-data");
+      assert_eq!(data.data.format, MpvFormat::MpvFormatNode);
+    }
+  }
 }
