@@ -1,4 +1,4 @@
-use std::{fmt::Binary, os::raw::c_void};
+use std::os::raw::c_void;
 
 use crate::mpv::types::MpvError;
 
@@ -6,8 +6,8 @@ use crate::mpv::types::MpvError;
 #[derive(PartialEq, Clone, Copy)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub enum MpvEventId {
-  FileLoaded = 8,
   Shutdown = 1,
+  FileLoaded = 8,
   PropertyChange = 22,
 }
 
