@@ -1,8 +1,6 @@
 use std::fmt;
 use std::os::raw::c_void;
 
-use crate::mpv::api::mpv_str::MpvStr;
-
 #[repr(C)]
 #[derive(PartialEq, Eq, Clone, Copy)]
 #[cfg_attr(debug_assertions, derive(Debug))]
@@ -89,11 +87,5 @@ impl FromRawMpv for i64 {
 impl FromRawMpv for f64 {
   fn from_raw(ptr: *mut c_void) -> Self {
     unsafe { *(ptr as *mut Self) }
-  }
-}
-
-impl<'a> FromRawMpv for MpvStr<'a> {
-  fn from_raw(ptr: *mut c_void) -> Self {
-    Self::from(ptr)
   }
 }

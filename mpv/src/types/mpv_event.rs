@@ -1,6 +1,6 @@
 use std::os::raw::c_void;
 
-use crate::mpv::types::MpvError;
+use crate::types::MpvError;
 
 #[repr(C)]
 #[derive(PartialEq, Clone, Copy)]

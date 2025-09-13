@@ -7,6 +7,7 @@ overseer.register_template({
       name = 'test',
       cmd = {
         'mpv',
+        '--mute',
         'test.mkv'
       },
       components = {

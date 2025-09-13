@@ -1,5 +1,6 @@
 use std::fmt::{self, Display};
 
+enum_from_primitive! {
 #[repr(C)]
 #[derive(PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
@@ -105,6 +106,7 @@ pub enum MpvError {
    * Unspecified error.
    */
   MpvErrorGeneric = -20,
+}
 }
 
 impl Display for MpvError {

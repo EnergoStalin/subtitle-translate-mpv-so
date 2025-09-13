@@ -1,12 +1,10 @@
-[package]
-name = "subtitle-translate-mpv-so"
-version = "0.1.0"
-edition = "2024"
+[workspace]
+members = [
+  "mpv",
+  "plugin"
+]
 
-[lib]
-crate-type = ["cdylib"]
-
-[dependencies]
+resolver = "2"
 
 [profile.release]
 panic = "abort"
