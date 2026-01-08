@@ -1,8 +1,7 @@
 use std::{
-  ffi::CStr,
+  ffi::{c_char, c_void, CStr, CString},
   fmt::Display,
   marker::PhantomData,
-  os::raw::{c_char, c_void},
 };
 
 use crate::ffi::mpv_free;
@@ -33,6 +32,18 @@ impl PartialEq<&str> for MpvStrOwned {
   }
 }
 
+impl From<*const c_char> for MpvStrOwned {
+  fn from(value: *const c_char) -> Self {
+    Self(value)
+  }
+}
+
+impl From<*const c_void> for MpvStrOwned {
+  fn from(value: *const c_void) -> Self {
+    Self::from(value as *const c_char)
+  }
+}
+
 impl MpvStrOwned {
   pub fn as_str(&self) -> Option<&str> {
     if self.as_ptr().is_null() {
@@ -60,35 +71,34 @@ impl<'a> MpvStr<'a> {
     self.0 as *const c_char
   }
 
-  fn try_from(value: *const c_char) -> Option<Self> {
+  pub fn try_from_void(value: *const c_void) -> Option<Self> {
+    Self::try_from(value as *const c_char)
+  }
+
+  pub fn try_from(value: *const c_char) -> Option<Self> {
     if value.is_null() {
       None
     } else {
-      Some(Self {
-        0: value,
-        1: PhantomData,
-      })
+      Some(Self(value, PhantomData))
     }
   }
 }
 
-impl<'a> Into<*const c_char> for MpvStr<'a> {
-  fn into(self) -> *const c_char {
-    self.as_ptr() as *const c_char
+impl<'a> From<*const c_char> for MpvStr<'a> {
+  fn from(value: *const c_char) -> Self {
+    Self(value, Default::default())
   }
 }
 
-impl<'a> Into<*const c_void> for MpvStr<'a> {
-  fn into(self) -> *const c_void {
-    self.as_ptr() as *const c_void
+impl<'a> From<*const c_void> for MpvStr<'a> {
+  fn from(value: *const c_void) -> Self {
+    Self::try_from_void(value).unwrap()
   }
 }
 
-impl<'a> Into<String> for MpvStr<'a> {
-  fn into(self) -> String {
-    unsafe { CStr::from_ptr(self.0) }
-      .to_string_lossy()
-      .into_owned()
+impl<'a> From<String> for MpvStr<'a> {
+  fn from(value: String) -> Self {
+    Self(CString::new(value).unwrap().as_ptr(), Default::default())
   }
 }
 

@@ -1,9 +1,8 @@
-use std::fmt;
-use std::os::raw::c_void;
+use std::ffi::c_void;
 
+enum_from_primitive! {
 #[repr(C)]
-#[derive(PartialEq, Eq, Clone, Copy)]
-#[cfg_attr(debug_assertions, derive(Debug))]
+#[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub enum MpvFormat {
   MpvFormatNone,
   MpvFormatString,
@@ -16,24 +15,6 @@ pub enum MpvFormat {
   MpvFormatNodeMap,
   MpvFormatByteArray,
 }
-
-impl fmt::Display for MpvFormat {
-  fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-    let n = self as *const _ as u32;
-    let s = match if n > MpvFormat::MpvFormatByteArray as u32 { &MpvFormat::MpvFormatNone } else { self } {
-      MpvFormat::MpvFormatNone => "MPV_FORMAT_NONE",
-      MpvFormat::MpvFormatString => "MPV_FORMAT_STRING",
-      MpvFormat::MpvFormatOsdString => "MPV_FORMAT_OSD_STRING",
-      MpvFormat::MpvFormatFlag => "MPV_FORMAT_FLAG",
-      MpvFormat::MpvFormatInt64 => "MPV_FORMAT_INT64",
-      MpvFormat::MpvFormatDouble => "MPV_FORMAT_DOUBLE",
-      MpvFormat::MpvFormatNode => "MPV_FORMAT_NODE",
-      MpvFormat::MpvFormatNodeArray => "MPV_FORMAT_NODE_ARRAY",
-      MpvFormat::MpvFormatNodeMap => "MPV_FORMAT_NODE_MAP",
-      MpvFormat::MpvFormatByteArray => "MPV_FORMAT_BYTE_ARRAY",
-    };
-    f.write_str(s)
-  }
 }
 
 pub trait ToRawMpv: Sized {

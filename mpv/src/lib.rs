@@ -1,5 +1,6 @@
-#[macro_use] extern crate enum_primitive;
+#[macro_use]
+extern crate enum_primitive;
 
-mod ffi;
 pub mod api;
+mod ffi;
 pub mod types;

@@ -1,7 +1,7 @@
 use crate::enum_primitive::FromPrimitive;
 
+use std::ffi::c_void;
 use std::ffi::CString;
-use std::os::raw::c_void;
 
 pub mod mpv_str;
 
@@ -15,11 +15,11 @@ pub struct MpvPlugin(MpvHandle);
 
 impl MpvPlugin {
   pub fn new(handle: MpvHandle) -> Self {
-    Self { 0: handle }
+    Self(handle)
   }
 
-  pub fn wait_event(&self, timeout: f64) -> &'static MpvEvent {
-    unsafe { mpv_wait_event(self.0, timeout).as_ref().unwrap() }
+  pub fn wait_event(&self, timeout: f64) -> MpvEvent {
+    unsafe { MpvEvent::from(mpv_wait_event(self.0, timeout).as_ref().unwrap()) }
   }
 
   pub fn get_property_string(&self, name: &str) -> MpvStrOwned {

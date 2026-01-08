@@ -1,9 +1,10 @@
 use std::fmt::{self, Display};
 
+use crate::ffi::mpv_error_string;
+
 enum_from_primitive! {
 #[repr(C)]
-#[derive(PartialEq)]
-#[cfg_attr(debug_assertions, derive(Debug))]
+#[derive(PartialEq, Clone, Debug)]
 pub enum MpvError {
   /**
    * No error happened (used to signal successful operation).
@@ -111,28 +112,6 @@ pub enum MpvError {
 
 impl Display for MpvError {
   fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-    f.write_str(match self {
-      MpvError::MpvErrorSuccess => "MPV_ERROR_SUCCESS",
-      MpvError::MpvErrorEventQueueFull => "MPV_ERROR_EVENT_QUEUE_FULL",
-      MpvError::MpvErrorNomem => "MPV_ERROR_NOMEM",
-      MpvError::MpvErrorUninitialized => "MPV_ERROR_UNINITIALIZED",
-      MpvError::MpvErrorInvalidParameter => "MPV_ERROR_INVALID_PARAMETER",
-      MpvError::MpvErrorOptionNotFound => "MPV_ERROR_OPTION_NOT_FOUND",
-      MpvError::MpvErrorOptionFormat => "MPV_ERROR_OPTION_FORMAT",
-      MpvError::MpvErrorOptionError => "MPV_ERROR_OPTION_ERROR",
-      MpvError::MpvErrorPropertyNotFound => "MPV_ERROR_PROPERTY_NOT_FOUND",
-      MpvError::MpvErrorPropertyFormat => "MPV_ERROR_PROPERTY_FORMAT",
-      MpvError::MpvErrorPropertyUnavailable => "MPV_ERROR_PROPERTY_UNAVAILABLE",
-      MpvError::MpvErrorPropertyError => "MPV_ERROR_PROPERTY_ERROR",
-      MpvError::MpvErrorCommand => "MPV_ERROR_COMMAND",
-      MpvError::MpvErrorLoadingFailed => "MPV_ERROR_LOADING_FAILED",
-      MpvError::MpvErrorAoInitFailed => "MPV_ERROR_AO_INIT_FAILED",
-      MpvError::MpvErrorVoInitFailed => "MPV_ERROR_VO_INIT_FAILED",
-      MpvError::MpvErrorNothingToPlay => "MPV_ERROR_NOTHING_TO_PLAY",
-      MpvError::MpvErrorUnknownFormat => "MPV_ERROR_UNKNOWN_FORMAT",
-      MpvError::MpvErrorUnsupported => "MPV_ERROR_UNSUPPORTED",
-      MpvError::MpvErrorNotImplemented => "MPV_ERROR_NOT_IMPLEMENTED",
-      MpvError::MpvErrorGeneric => "MPV_ERROR_GENERIC",
-    })
+    unsafe { f.write_str(mpv_error_string(self.clone() as i32).as_str()) }
   }
 }
