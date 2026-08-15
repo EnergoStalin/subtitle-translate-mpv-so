@@ -1,10 +1,14 @@
 [workspace]
 members = [
+  "ffi",
   "mpv",
-  "plugin"
+  "plugin",
 ]
-
 resolver = "2"
 
 [profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
 panic = "abort"
+strip = true

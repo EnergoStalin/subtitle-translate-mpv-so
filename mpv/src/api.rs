@@ -1,7 +1,8 @@
 use crate::enum_primitive::FromPrimitive;
+use crate::ffi::mpv_command_string;
 
-use std::ffi::c_void;
 use std::ffi::CString;
+use std::ffi::c_void;
 
 pub mod mpv_str;
 
@@ -28,6 +29,16 @@ impl MpvPlugin {
 
   pub fn observe_property_string(&self, reply_userdata: u64, name: &str) -> MpvError {
     self.observe_property(reply_userdata, name, MpvFormat::MpvFormatString)
+  }
+
+  pub fn command(&self, command: &str) -> MpvError {
+    unsafe {
+      MpvError::from_i32(mpv_command_string(
+        self.0,
+        CString::new(command).unwrap().as_ptr(),
+      ))
+      .unwrap_or(MpvError::MpvErrorGeneric)
+    }
   }
 
   pub fn observe_property(&self, reply_userdata: u64, name: &str, format: MpvFormat) -> MpvError {

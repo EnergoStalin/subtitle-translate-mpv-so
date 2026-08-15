@@ -1,11 +1,11 @@
 use std::ffi::{c_int, c_void};
 
-use crate::api::mpv_str::MpvStr;
+use ffi::str::CStrRef;
 
 #[repr(C)]
 #[derive(Debug)]
 pub struct MpvEventProperty<'a> {
-  pub name: MpvStr<'a>,
+  pub name: CStrRef<'a>,
   pub format: c_int,
   pub data: *const c_void,
 }

@@ -1,8 +1,7 @@
+use ffi::str::CStrRef;
+
 use crate::{
-  api::{
-    mpv_str::{MpvStr, MpvStrOwned},
-    MpvHandle,
-  },
+  api::{MpvHandle, mpv_str::MpvStrOwned},
   types::{FfiMpvEvent, MpvFormat},
 };
 use std::ffi::{c_char, c_double, c_int, c_ulong, c_void};
@@ -23,12 +22,13 @@ unsafe extern "C" {
     out: *mut c_void,
   ) -> c_int;
   pub fn mpv_get_property_string(handle: MpvHandle, name: *const c_char) -> MpvStrOwned;
+  pub fn mpv_command_string(handle: MpvHandle, command: *const c_char) -> c_int;
   pub fn mpv_set_property(
     handle: MpvHandle,
     name: *const c_char,
     format: MpvFormat,
     ptr: *const c_void,
   ) -> c_int;
-  pub fn mpv_event_name(id: c_int) -> MpvStr<'static>;
-  pub fn mpv_error_string(id: c_int) -> MpvStr<'static>;
+  pub fn mpv_event_name(id: c_int) -> CStrRef<'static>;
+  pub fn mpv_error_string(id: c_int) -> CStrRef<'static>;
 }

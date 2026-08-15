@@ -8,3 +8,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 mpv = { version = "0.1.0", path = "../mpv" }
+ffi = { version = "0.1.0", path = "../ffi" }
+
+[build-dependencies]
+xmake = "0.3.3"

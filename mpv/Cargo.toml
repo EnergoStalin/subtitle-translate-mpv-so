@@ -5,3 +5,4 @@ edition = "2024"
 
 [dependencies]
 enum_primitive = "0.1.1"
+ffi = { version = "0.1.0", path = "../ffi" }

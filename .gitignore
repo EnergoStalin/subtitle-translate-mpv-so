@@ -6,11 +6,10 @@ build/
 # MacOS Cache
 .DS_Store
 
-
-compile_commands.json
-
-
 # Added by cargo
 
 /target
-test.mkv
+
+/test.mkv
+/test.ass
+compile_commands.json

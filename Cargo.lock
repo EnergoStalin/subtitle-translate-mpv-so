@@ -4,9 +4,19 @@ version = 4
 
 [[package]]
 name = "autocfg"
-version = "1.5.0"
+version = "1.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c08606f8c3cbf4ce6ec8e28fb0014a2c086708fe954eaa885384a6165172e7e8"
+checksum = "f2032f911046de80f0a198e0901378627c33f59ea0ac00e363d481118bd70a53"
+
+[[package]]
+name = "cc"
+version = "1.4.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "509591b7bcd67f4ef775afad7662703b4935daaa6ec0e5605cfb1090b32a2b6d"
+dependencies = [
+ "find-msvc-tools",
+ "shlex",
+]
 
 [[package]]
 name = "enum_primitive"
@@ -18,10 +28,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "ffi"
+version = "0.1.0"
+
+[[package]]
+name = "find-msvc-tools"
+version = "0.1.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d45db016d36b838f563236e9193d0ee6ce38f3f68b6c94e914b4929c96bbb890"
+
+[[package]]
 name = "mpv"
 version = "0.1.0"
 dependencies = [
  "enum_primitive",
+ "ffi",
 ]
 
 [[package]]
@@ -43,8 +64,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "shlex"
+version = "2.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f8fadd59c855ef2080decdef8ff161eb6661b86933c9d82e5ba29dc602a55aba"
+
+[[package]]
 name = "subtitle-translate-mpv-so"
 version = "0.1.0"
 dependencies = [
+ "ffi",
  "mpv",
+ "xmake",
+]
+
+[[package]]
+name = "xmake"
+version = "0.3.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "382854cb989b2691c0f056283ed8b44699ab4aee49d5d532412908c9faf93cc0"
+dependencies = [
+ "cc",
 ]

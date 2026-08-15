@@ -1,0 +1,2 @@
+#pragma once
+#define MPV_HAS_CANCEL (MPV_CLIENT_API_VERSION > MPV_MAKE_VERSION(1, 106))
